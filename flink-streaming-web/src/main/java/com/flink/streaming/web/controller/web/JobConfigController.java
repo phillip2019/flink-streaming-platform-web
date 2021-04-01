@@ -119,6 +119,8 @@ public class JobConfigController {
         jobConfigDTO.setJobName(String.format("%s_%s_copy", jobConfigDTO.getJobName(), StringUtils.lowerCase(RandomStringUtils.randomAlphanumeric(4))));
         jobConfigDTO.setStatus(JobConfigStatus.STOP);
         jobConfigDTO.setIsOpen(0);
+        jobConfigDTO.setJobId(null);
+        jobConfigDTO.setLastRunLogId(null);
         jobConfigAO.addJobConfig(jobConfigDTO);
 
         return "redirect:listPage";
