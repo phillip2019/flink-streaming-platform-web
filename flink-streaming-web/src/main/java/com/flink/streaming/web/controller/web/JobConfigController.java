@@ -115,7 +115,7 @@ public class JobConfigController {
         // 状态默认重置为停止
         // 开启配置 isOpen 1
         jobConfigDTO.setId(null);
-        jobConfigDTO.setJobName(jobConfigDTO.getJobName() + '_' + RandomStringUtils.randomAlphabetic(4) + "_copy");
+        jobConfigDTO.setJobName(jobConfigDTO.getJobName() + '_' + RandomStringUtils.randomAlphanumeric(4) + "_copy");
         jobConfigDTO.setStatus(JobConfigStatus.STOP);
         jobConfigDTO.setIsOpen(0);
         jobConfigAO.addJobConfig(jobConfigDTO);
