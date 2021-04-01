@@ -66,7 +66,7 @@
                                 <label for="inputfile">告警辅助配置：</label>
 
                                 <label class="checkbox-inline">
-                                    <input type="checkbox" name="alarmType" value="1" />
+                                    <input type="checkbox" name="alarmType" value="1"  checked="checked" />
                                     钉钉告警
                                 </label>
                                 <label class="checkbox-inline">
@@ -86,21 +86,21 @@
                                 <label for="inputfile">*运行模式：</label>
                                 <select class="form-control " id="deployMode">
                                     <option value="">请选择</option>
-                                    <option value="YARN_PER">YARN_PER</option>
+                                    <option value="YARN_PER" selected="selected">YARN_PER</option>
                                     <option value="LOCAL">Local Cluster</option>
                                     <option value="STANDALONE">Standalone Cluster</option>
                                 </select>
                             </div>
                             <div class="form-group" id="configDiv">
                                 <label for="inputfile" >*flink运行配置(如yarn模式 -yjm 1024m -ytm 1024m -p 1 -yqu streaming)：</label>
-                                <input class="form-control " type="text" name="flinkRunConfig" id="flinkRunConfig">
+                                <input class="form-control " type="text" name="flinkRunConfig" id="flinkRunConfig" value="-yjm 1024m -ytm 1024m -p 1 -yqu root.users.hive">
                             </div>
                             <div class="form-group">
                                 <label for="inputfile" data-toggle="tooltip" data-placement="bottom"
                                        title="不填默认不开启checkpoint机制 参数只支持 -checkpointInterval -checkpointingMode -checkpointTimeout -checkpointDir -tolerableCheckpointFailureNumber -asynchronousSnapshots 如  -asynchronousSnapshots true  -checkpointDir  hdfs//XXX/flink/checkpoint/ -externalizedCheckpointCleanup DELETE_ON_CANCELLATION or RETAIN_ON_CANCELLATION">Checkpoint信息：</label>
                                 <input class="form-control " type="text"
                                        placeholder="Checkpoint信息 如   -checkpointDir  hdfs//XXX/flink/checkpoint/"
-                                       name="flinkCheckpointConfig" id="flinkCheckpointConfig">
+                                       name="flinkCheckpointConfig" id="flinkCheckpointConfig" value="-checkpointDir hdfs:///user/flink/checkpoints/  -checkpointInterval 300000 ">
                             </div>
 
                             <div class="form-group">

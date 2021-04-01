@@ -18,6 +18,6 @@ public class PageParam {
     /**
      * 每页数量
      */
-    private int pageSize = 15;
 
+    private int pageSize = 50;
 }
