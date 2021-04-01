@@ -24,8 +24,7 @@ public class SystemConstants {
 
     public static final String CODE_UTF_8 = "UTF-8";
 
-
-    public static final String DEFAULT_SAVEPOINT_ROOT_PATH = "hdfs:///flink/savepoint/flink-streaming-platform-web/";
+    public static final String DEFAULT_SAVEPOINT_ROOT_PATH = "hdfs:///user/flink/checkpoints/";
 
     public static final String SLASH = "/";
 
