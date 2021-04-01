@@ -117,10 +117,10 @@ public class JobConfigController {
         jobConfigDTO.setId(null);
         jobConfigDTO.setJobName(jobConfigDTO.getJobName() + '_' + RandomStringUtils.randomAlphabetic(4) + "_copy");
         jobConfigDTO.setStatus(JobConfigStatus.STOP);
-        jobConfigDTO.setIsOpen(1);
+        jobConfigDTO.setIsOpen(0);
         jobConfigAO.addJobConfig(jobConfigDTO);
 
-        return "redirect:screen/listPage";
+        return "redirect:/listPage";
     }
 
     @RequestMapping("/detailPage")
