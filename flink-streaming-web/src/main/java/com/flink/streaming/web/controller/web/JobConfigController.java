@@ -4,6 +4,7 @@ import com.flink.streaming.web.enums.AlarmTypeEnum;
 import com.flink.streaming.web.ao.JobConfigAO;
 import com.flink.streaming.web.enums.DeployModeEnum;
 import com.flink.streaming.web.enums.JobTypeEnum;
+import com.flink.streaming.web.enums.JobConfigStatus;
 import com.flink.streaming.web.enums.SysConfigEnum;
 import com.flink.streaming.web.model.dto.JobConfigDTO;
 import com.flink.streaming.web.model.dto.PageModel;
@@ -15,6 +16,7 @@ import com.flink.streaming.web.service.JobAlarmConfigService;
 import com.flink.streaming.web.service.JobConfigService;
 import com.flink.streaming.web.service.SystemConfigService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -110,12 +112,15 @@ public class JobConfigController {
         // copy job conf
         // 默认将id去除
         // 默认在任务名称后面+copy字符
+        // 状态默认重置为停止
+        // 开启配置 isOpen 1
         jobConfigDTO.setId(null);
-        jobConfigDTO.setJobName(jobConfigDTO.getJobName() + "_copy");
+        jobConfigDTO.setJobName(jobConfigDTO.getJobName() + '_' + RandomStringUtils.randomAlphabetic(4) + "_copy");
+        jobConfigDTO.setStatus(JobConfigStatus.STOP);
+        jobConfigDTO.setIsOpen(1);
         jobConfigAO.addJobConfig(jobConfigDTO);
 
-        return "screen/listPage";
-
+        return "redirect:screen/listPage";
     }
 
     @RequestMapping("/detailPage")
@@ -128,8 +133,6 @@ public class JobConfigController {
         }
         return "screen/job_config/detailPage";
     }
-
-
 
     private void list(ModelMap modelMap, JobConfigParam jobConfigParam){
         PageModel<JobConfigDTO> pageModel = jobConfigService.queryJobConfig(jobConfigParam);
