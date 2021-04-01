@@ -120,7 +120,7 @@ public class JobConfigController {
         jobConfigDTO.setIsOpen(0);
         jobConfigAO.addJobConfig(jobConfigDTO);
 
-        return "redirect:/listPage";
+        return "redirect:listPage";
     }
 
     @RequestMapping("/detailPage")
