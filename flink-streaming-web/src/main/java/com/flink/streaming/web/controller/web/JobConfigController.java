@@ -121,6 +121,9 @@ public class JobConfigController {
         jobConfigDTO.setIsOpen(0);
         jobConfigDTO.setJobId(null);
         jobConfigDTO.setLastRunLogId(null);
+        jobConfigDTO.setVersion(0);
+        jobConfigDTO.setLastStartTime(null);
+        
         jobConfigAO.addJobConfig(jobConfigDTO);
 
         return "redirect:listPage";
