@@ -17,6 +17,7 @@ import com.flink.streaming.web.service.JobConfigService;
 import com.flink.streaming.web.service.SystemConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -115,7 +116,7 @@ public class JobConfigController {
         // 状态默认重置为停止
         // 开启配置 isOpen 1
         jobConfigDTO.setId(null);
-        jobConfigDTO.setJobName(jobConfigDTO.getJobName() + '_' + RandomStringUtils.randomAlphanumeric(4) + "_copy");
+        jobConfigDTO.setJobName(String.format("%s_%s_copy", jobConfigDTO.getJobName(), StringUtils.lowerCase(RandomStringUtils.randomAlphanumeric(4)));
         jobConfigDTO.setStatus(JobConfigStatus.STOP);
         jobConfigDTO.setIsOpen(0);
         jobConfigAO.addJobConfig(jobConfigDTO);
