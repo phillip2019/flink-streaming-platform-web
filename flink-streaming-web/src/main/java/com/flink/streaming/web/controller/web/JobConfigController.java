@@ -1,6 +1,7 @@
 package com.flink.streaming.web.controller.web;
 
 import com.flink.streaming.web.enums.AlarmTypeEnum;
+import com.flink.streaming.web.ao.JobConfigAO;
 import com.flink.streaming.web.enums.DeployModeEnum;
 import com.flink.streaming.web.enums.JobTypeEnum;
 import com.flink.streaming.web.enums.SysConfigEnum;
@@ -45,6 +46,9 @@ public class JobConfigController {
 
     @Autowired
     public JobAlarmConfigService jobAlarmConfigService;
+
+    @Autowired
+    private JobConfigAO jobConfigAO;
 
 
     @RequestMapping(value = "/listPage")
@@ -99,6 +103,20 @@ public class JobConfigController {
         return "screen/job_config/editJarPage";
     }
 
+    @RequestMapping("/copyJob")
+    public String copyJob(ModelMap modelMap, Long id) {
+        JobConfigDTO jobConfigDTO = jobConfigService.getJobConfigById(id);
+
+        // copy job conf
+        // 默认将id去除
+        // 默认在任务名称后面+copy字符
+        jobConfigDTO.setId(null);
+        jobConfigDTO.setJobName(jobConfigDTO.getJobName() + "_copy");
+        jobConfigAO.addJobConfig(jobConfigDTO);
+
+        return "screen/listPage";
+
+    }
 
     @RequestMapping("/detailPage")
     public String detailPage(ModelMap modelMap, Long id) {
