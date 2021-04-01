@@ -2,6 +2,7 @@ package com.flink.streaming.web.common;
 
 import com.flink.streaming.web.exceptions.BizException;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * 系统常量
@@ -23,7 +24,7 @@ public class SystemConstants {
     public static final String USER_NAME_TASK_AUTO = "task-auto";
 
     public static final String CODE_UTF_8 = "UTF-8";
-
+    
     public static final String DEFAULT_SAVEPOINT_ROOT_PATH = "hdfs:///user/flink/checkpoints/";
 
     public static final String SLASH = "/";
