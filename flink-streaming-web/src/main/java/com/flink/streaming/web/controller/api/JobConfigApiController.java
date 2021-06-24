@@ -6,18 +6,16 @@ import com.flink.streaming.web.ao.JobConfigAO;
 import com.flink.streaming.web.ao.JobServerAO;
 import com.flink.streaming.web.common.FlinkConstants;
 import com.flink.streaming.web.common.RestResult;
+import com.flink.streaming.web.enums.*;
 import com.flink.streaming.web.exceptions.BizException;
 import com.flink.streaming.web.common.util.CliConfigUtil;
 import com.flink.streaming.web.common.util.MatcherUtils;
 import com.flink.streaming.web.controller.web.BaseController;
-import com.flink.streaming.web.enums.DeployModeEnum;
-import com.flink.streaming.web.enums.JobTypeEnum;
-import com.flink.streaming.web.enums.SysErrorEnum;
-import com.flink.streaming.web.enums.YN;
 import com.flink.streaming.web.model.dto.JobConfigDTO;
 import com.flink.streaming.web.model.param.UpsertJobConfigParam;
 import com.flink.streaming.web.service.JobConfigService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -181,6 +179,43 @@ public class JobConfigApiController extends BaseController {
         return RestResult.success();
     }
 
+    @RequestMapping(value = "/copyConfig", method = {RequestMethod.POST})
+    public RestResult copyConfig(UpsertJobConfigParam upsertJobConfigParam) {
+        try {
+            JobConfigDTO jobConfigDTO = jobConfigService.getJobConfigById(upsertJobConfigParam.getId());
+            if (jobConfigDTO == null) {
+                return RestResult.error("原始拷贝数据不存在");
+            }
+            /*
+             copy job conf
+             默认将id去除
+             默认在任务名称后面copy_随机字符_${jobConfigDTO.getJobName()}字符
+             状态默认重置为停止
+             开启配置 isOpen 0
+             */
+            jobConfigDTO.setId(null);
+            jobConfigDTO.setJobName(String.format("copy_%s_%s",
+                    StringUtils.lowerCase(RandomStringUtils.randomAlphanumeric(4)),jobConfigDTO.getJobName()));
+            jobConfigDTO.setStatus(JobConfigStatus.STOP);
+            jobConfigDTO.setIsOpen(YN.N.getValue());
+            jobConfigDTO.setJobId(null);
+            jobConfigDTO.setLastRunLogId(null);
+            jobConfigDTO.setVersion(0);
+            jobConfigDTO.setLastStartTime(null);
+            jobConfigDTO.setLastRunLogId(null);
+
+            jobConfigAO.addJobConfig(jobConfigDTO);
+
+        } catch (BizException biz) {
+            log.warn("copyJobConfigById is error ", biz);
+            return RestResult.error(biz.getErrorMsg());
+        } catch (Exception e) {
+            log.error("copyJobConfigById is error", e);
+            return RestResult.error(e.getMessage());
+        }
+        return RestResult.success();
+    }
+
     private RestResult checkUpsertJobConfigParam(UpsertJobConfigParam upsertJobConfigParam) {
         if (upsertJobConfigParam == null) {
             return RestResult.error("参数不能空");
@@ -290,14 +325,14 @@ public class JobConfigApiController extends BaseController {
             return RestResult.success();
         }
         if (StringUtils.isNotEmpty(checkPointParam.getCheckpointingMode())) {
-            if (!(FlinkConstants.EXACTLY_ONCE.equals(checkPointParam.getCheckpointingMode().toUpperCase())
-                    || FlinkConstants.AT_LEAST_ONCE.equals(checkPointParam.getCheckpointingMode().toUpperCase()))) {
+            if (!(FlinkConstants.EXACTLY_ONCE.equalsIgnoreCase(checkPointParam.getCheckpointingMode())
+                    || FlinkConstants.AT_LEAST_ONCE.equalsIgnoreCase(checkPointParam.getCheckpointingMode()))) {
                 return RestResult.error("checkpointingMode 参数必须是  AT_LEAST_ONCE 或者 EXACTLY_ONCE");
             }
         }
         if (StringUtils.isNotEmpty(checkPointParam.getExternalizedCheckpointCleanup())) {
-            if (!(FlinkConstants.DELETE_ON_CANCELLATION.equals(checkPointParam.getExternalizedCheckpointCleanup().toUpperCase())
-                    || FlinkConstants.RETAIN_ON_CANCELLATION.equals(checkPointParam.getExternalizedCheckpointCleanup().toUpperCase()))) {
+            if (!(FlinkConstants.DELETE_ON_CANCELLATION.equalsIgnoreCase(checkPointParam.getExternalizedCheckpointCleanup())
+                    || FlinkConstants.RETAIN_ON_CANCELLATION.equalsIgnoreCase(checkPointParam.getExternalizedCheckpointCleanup()))) {
                 return RestResult.error("externalizedCheckpointCleanup 参数必须是DELETE_ON_CANCELLATION 或者 RETAIN_ON_CANCELLATION");
             }
         }
