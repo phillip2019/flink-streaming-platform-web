@@ -1,10 +1,8 @@
 package com.flink.streaming.web.controller.web;
 
+import com.flink.streaming.common.enums.JobTypeEnum;
 import com.flink.streaming.web.enums.AlarmTypeEnum;
-import com.flink.streaming.web.ao.JobConfigAO;
 import com.flink.streaming.web.enums.DeployModeEnum;
-import com.flink.streaming.web.enums.JobTypeEnum;
-import com.flink.streaming.web.enums.JobConfigStatus;
 import com.flink.streaming.web.enums.SysConfigEnum;
 import com.flink.streaming.web.model.dto.JobConfigDTO;
 import com.flink.streaming.web.model.dto.PageModel;
@@ -16,8 +14,6 @@ import com.flink.streaming.web.service.JobAlarmConfigService;
 import com.flink.streaming.web.service.JobConfigService;
 import com.flink.streaming.web.service.SystemConfigService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -50,23 +46,20 @@ public class JobConfigController {
     @Autowired
     public JobAlarmConfigService jobAlarmConfigService;
 
-    @Autowired
-    private JobConfigAO jobConfigAO;
-
 
     @RequestMapping(value = "/listPage")
     public String listPage(ModelMap modelMap, JobConfigParam jobConfigParam) {
         if (jobConfigParam==null){
             jobConfigParam=new JobConfigParam();
         }
-        jobConfigParam.setJobType(JobTypeEnum.SQL.getCode());
+        jobConfigParam.setJobType(JobTypeEnum.SQL_STREAMING.getCode());
         this.list(modelMap, jobConfigParam);
         modelMap.put("active", "list");
         return "screen/job_config/listPage";
     }
 
     @RequestMapping(value = "/jarListPage")
-    public String jarlistPage(ModelMap modelMap, JobConfigParam jobConfigParam) {
+    public String jarListPage(ModelMap modelMap, JobConfigParam jobConfigParam) {
         if (jobConfigParam==null){
             jobConfigParam=new JobConfigParam();
         }
@@ -75,6 +68,20 @@ public class JobConfigController {
         modelMap.put("active", "jarlist");
         return "screen/job_config/jarListPage";
     }
+
+    @RequestMapping(value = "/batchListPage")
+    public String batchListPage(ModelMap modelMap, JobConfigParam jobConfigParam) {
+        if (jobConfigParam==null){
+            jobConfigParam=new JobConfigParam();
+        }
+        jobConfigParam.setJobType(JobTypeEnum.SQL_BATCH.getCode());
+        this.list(modelMap, jobConfigParam);
+        modelMap.put("active", "batchlist");
+        return "screen/job_config/batchListPage";
+    }
+
+
+
 
     @RequestMapping("/addPage")
     public String addPage(ModelMap modelMap) {
@@ -89,6 +96,13 @@ public class JobConfigController {
         modelMap.put("active", "addPage");
         modelMap.put("open", "config");
         return "screen/job_config/addJarPage";
+    }
+
+    @RequestMapping("/addSqlBatchPage")
+    public String addSqlBatchPage(ModelMap modelMap) {
+        modelMap.put("active", "addPage");
+        modelMap.put("open", "config");
+        return "screen/job_config/addBatchPage";
     }
 
 
@@ -106,28 +120,6 @@ public class JobConfigController {
         return "screen/job_config/editJarPage";
     }
 
-    @RequestMapping("/copyJob")
-    public String copyJob(ModelMap modelMap, Long id) {
-        JobConfigDTO jobConfigDTO = jobConfigService.getJobConfigById(id);
-
-        // copy job conf
-        // 默认将id去除
-        // 默认在任务名称后面+copy字符
-        // 状态默认重置为停止
-        // 开启配置 isOpen 1
-        jobConfigDTO.setId(null);
-        jobConfigDTO.setJobName(String.format("%s_%s_copy", jobConfigDTO.getJobName(), StringUtils.lowerCase(RandomStringUtils.randomAlphanumeric(4))));
-        jobConfigDTO.setStatus(JobConfigStatus.STOP);
-        jobConfigDTO.setIsOpen(0);
-        jobConfigDTO.setJobId(null);
-        jobConfigDTO.setLastRunLogId(null);
-        jobConfigDTO.setVersion(0);
-        jobConfigDTO.setLastStartTime(null);
-        
-        jobConfigAO.addJobConfig(jobConfigDTO);
-
-        return "redirect:listPage";
-    }
 
     @RequestMapping("/detailPage")
     public String detailPage(ModelMap modelMap, Long id) {
@@ -139,6 +131,8 @@ public class JobConfigController {
         }
         return "screen/job_config/detailPage";
     }
+
+
 
     private void list(ModelMap modelMap, JobConfigParam jobConfigParam){
         PageModel<JobConfigDTO> pageModel = jobConfigService.queryJobConfig(jobConfigParam);
