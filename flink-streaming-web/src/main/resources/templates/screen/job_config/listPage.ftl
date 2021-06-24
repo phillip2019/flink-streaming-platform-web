@@ -91,7 +91,7 @@
                                 <select class="form-control" name="stauts">
                                     <option value=""> 运行状态</option>
                                     <option value="1" <#if (jobConfigParam??) &&(jobConfigParam.stauts??) && jobConfigParam.stauts==1> selected</#if> >
-                                        运行中
+                                       运行中
                                     </option>
                                     <option value="0" <#if (jobConfigParam??) &&(jobConfigParam.stauts??) && jobConfigParam.stauts==0> selected</#if> >
                                         停止中
@@ -132,7 +132,6 @@
                                     <th>任务名称</th>
                                     <th width="90px">是否开启</th>
                                     <th>运行模式</th>
-                                    <th>是否开启</th>
                                     <th>运行状态</th>
                                     <th>任务id</th>
                                     <th>创建时间</th>
@@ -207,8 +206,7 @@
                                                 </#if>
                                                 <a href="/admin/editPage?id=${jobConfigVO.id}"  target="_blank">修改</a>
                                                 <a href="/admin/detailPage?id=${jobConfigVO.id}" target="_blank">详情</a>
-
-
+                                                <a href="#" onclick="copyConfig(${jobConfigVO.id})">复制</a>
                                             </td>
                                             <td>${jobConfigVO.alarmStrs!""}</td>
                                             <td>
