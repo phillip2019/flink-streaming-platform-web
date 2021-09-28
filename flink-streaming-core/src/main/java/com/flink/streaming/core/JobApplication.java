@@ -10,6 +10,7 @@ import com.flink.streaming.core.checkpoint.FsCheckPoint;
 import com.flink.streaming.core.execute.ExecuteSql;
 import com.flink.streaming.core.model.JobRunParam;
 import com.flink.streaming.core.udf.UDFSubstring;
+import com.flink.streaming.core.udf.UDFWXBot;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.java.utils.ParameterTool;
@@ -73,6 +74,7 @@ public class JobApplication {
                 tEnv = StreamTableEnvironment.create(env, settings);
                 // 注册函数
                 tEnv.createTemporarySystemFunction("sub_string", new UDFSubstring(true));
+                tEnv.createTemporarySystemFunction("wx_bot", UDFWXBot.class);
                 //设置checkPoint
                 FsCheckPoint.setCheckpoint(env, jobRunParam.getCheckPointParam());
 
