@@ -72,7 +72,7 @@ public class JobApplication {
                         .build();
                 tEnv = StreamTableEnvironment.create(env, settings);
                 // 注册函数
-                tEnv.createTemporarySystemFunction("sub_string", UDFSubstring.class);
+                tEnv.createTemporarySystemFunction("sub_string", new UDFSubstring(true));
                 //设置checkPoint
                 FsCheckPoint.setCheckpoint(env, jobRunParam.getCheckPointParam());
 

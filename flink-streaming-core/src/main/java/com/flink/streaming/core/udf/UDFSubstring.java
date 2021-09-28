@@ -3,7 +3,7 @@ package com.flink.streaming.core.udf;
 import org.apache.flink.table.functions.ScalarFunction;
 
 public class UDFSubstring extends ScalarFunction {
-    private boolean endInclusive;
+    private boolean endInclusive = false;
 
     public UDFSubstring(boolean endInclusive) {
         this.endInclusive = endInclusive;
