@@ -71,7 +71,7 @@ public class UDFWXBot extends ScalarFunction {
 
         RequestBody body = null;
         try {
-            body = RequestBody.create(JacksonBuilder.mapper.writeValueAsString(resOn), JSON_MEDIA_TYPE);
+            body = RequestBody.create(JSON_MEDIA_TYPE, JacksonBuilder.mapper.writeValueAsString(resOn));
         } catch (JsonProcessingException e) {
             logger.error("序列化参数值异常， 参数值为: {}", resOn, e);
             body = RequestBody.create(ERROR_WX_MSG, JSON_MEDIA_TYPE);
