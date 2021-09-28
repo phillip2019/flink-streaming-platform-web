@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -33,7 +34,7 @@ public class UDFWXBot extends ScalarFunction {
     @Override
     public void open(FunctionContext context) throws Exception {
         super.open(context);
-        VelocityEngine ve = new VelocityEngine();
+        ve = new VelocityEngine();
         ve.init();
     }
 
@@ -101,5 +102,21 @@ public class UDFWXBot extends ScalarFunction {
 
         logger.info("发送成功， {}", rspWkJn.toString());
         return Boolean.TRUE;
+    }
+
+    @Override
+    public void close() throws Exception {
+        super.close();
+    }
+
+    public static void main(String[] args) {
+        Map<String, String> m = new HashMap<>();
+        m.put("k1", "v1");
+        m.put("k2", "v2");
+        VelocityContext vc = new VelocityContext(m);
+        StringWriter wxMsgWriter = new StringWriter();
+        VelocityEngine ve = new VelocityEngine();
+        ve.init();
+        ve.evaluate(vc, wxMsgWriter, "wxMessage",  "测试发送消息");
     }
 }
