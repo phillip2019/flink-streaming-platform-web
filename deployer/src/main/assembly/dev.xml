@@ -89,6 +89,8 @@
                 <exclude>commons-compiler:*</exclude>
                 <exclude>commons-codec:*</exclude>
                 <exclude>commons-io:*</exclude>
+                <exclude>com.squareup.okhttp3:*</exclude>
+                <exclude>com.squareup.okio:*</exclude>
                 <exclude>jakarta.annotation:*</exclude>
                 <exclude>commons-cli:*</exclude>
                 <exclude>joda-time:*</exclude>
