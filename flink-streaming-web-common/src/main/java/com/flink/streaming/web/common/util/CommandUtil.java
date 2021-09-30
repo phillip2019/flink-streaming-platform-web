@@ -84,6 +84,8 @@ public class CommandUtil {
         command.append(jobRunParamDTO.getFlinkRunParam()).append(" ");
         command.append(" -ynm ").append(JobConfigDTO.buildRunName(jobConfigDTO.getJobName())).append(" ");
         command.append(" -yd -m yarn-cluster ").append(" ");
+        // 设置uft8编码，避免文件乱码
+        command.append(" -yD env.java.opts=\"-Djava.net.preferIPv4Stack=true -Dfile.encoding=utf-8 -Duser.language=zh\" ");
 
         if (StringUtils.isNotEmpty(jobConfigDTO.getExtJarPath())) {
             String[] urls = jobConfigDTO.getExtJarPath().split(SystemConstant.LINE_FEED);
