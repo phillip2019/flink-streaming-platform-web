@@ -36,14 +36,15 @@ public class UDFWXBot extends ScalarFunction  {
         super.open(context);
         ve = new VelocityEngine();
         ve.init();
-
     }
+
+
 
     /**
      * @description 发送企业微信机器人
      * @return 是否发送成功
      **/
-    public Boolean eval(String wxWebHook, String markdownTemplate, Map<String, Object> params) throws IOException {
+    public Boolean eval(String wxWebHook, String markdownTemplate, Map<String, String> params) throws IOException {
         if (StringUtils.isBlank(wxWebHook)) {
             logger.error("微信机器人地址输入为空，请检查之后再试");
             return Boolean.FALSE;
